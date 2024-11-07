@@ -2,6 +2,5 @@ spring:
   application:
   name: telegram-java-bot
 bot:
-  name: spareParts_bot
-  token: 7693043506:AAH1GbDtPQTyoULWLKyVWAEvN2EfAoYwMcg
-
+  name: "spareParts_bot"
+  token: "7693043506:AAH1GbDtPQTyoULWLKyVWAEvN2EfAoYwMcg"
