@@ -1,6 +1,17 @@
 spring:
-  application:
-  name: telegram-java-bot
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:postgresql://localhost:5432/foodOrders
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+  sql:
+    init:
+      platform: postgres
 bot:
   name: "spareParts_bot"
   token: "7693043506:AAH1GbDtPQTyoULWLKyVWAEvN2EfAoYwMcg"

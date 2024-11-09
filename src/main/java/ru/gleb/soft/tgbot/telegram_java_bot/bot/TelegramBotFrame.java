@@ -1,7 +1,5 @@
 package ru.gleb.soft.tgbot.telegram_java_bot.bot;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -10,7 +8,8 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.gleb.soft.tgbot.telegram_java_bot.config.BotConfig;
+import ru.gleb.soft.tgbot.telegram_java_bot.domain.entities.Client;
+import ru.gleb.soft.tgbot.telegram_java_bot.domain.services.ClientService;
 
 import java.util.List;
 
@@ -18,8 +17,10 @@ import java.util.List;
 public class TelegramBotFrame extends TelegramLongPollingBot {
     @Autowired
     DefaultBotOptions defaultBotOptions;
-    public TelegramBotFrame(DefaultBotOptions defaultBotOptions, @Value("${bot.token}") String botToken) {
+    private final ClientService clientService;
+    public TelegramBotFrame(DefaultBotOptions defaultBotOptions, @Value("${bot.token}") String botToken, ClientService clientService) {
         super(defaultBotOptions, botToken);
+        this.clientService = clientService;
     }
 
     @Override
@@ -31,6 +32,11 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
             switch (messageText) {
                 case "/start":
                     startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+                    Client client = new Client();
+                    client.setLogin(update.getMessage().getChat().getFirstName());
+                    client.setName(update.getMessage().getChat().getLastName());
+                    client.setChatId(chatId);
+                    clientService.save(client);
                     break;
             }
         }
@@ -38,10 +44,7 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
     }
 
     private void startCommandReceived(Long chatId, String name) {
-        String answer = "Hi, " + name + ", nice to meet you!" + "\n" +
-                "Enter the currency whose official exchange rate" + "\n" +
-                "you want to know in relation to BYN." + "\n" +
-                "For example: USD";
+        String answer = "я люююблюю тебя до слёёёёз кажый день как пелвыыый лаз, блеск тових класивых гаааз это облаааако из лооооз";
         sendMessage(chatId, answer);
     }
 
