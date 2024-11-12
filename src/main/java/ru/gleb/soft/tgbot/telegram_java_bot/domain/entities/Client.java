@@ -3,6 +3,8 @@ package ru.gleb.soft.tgbot.telegram_java_bot.domain.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "clients")
 public class Client {
@@ -22,6 +24,12 @@ public class Client {
 
     @Column(name = "link")
     private String link;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "client_dish",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "dish_id"))
+    private List<Dish> order;
 
     public int getId() {
         return id;
