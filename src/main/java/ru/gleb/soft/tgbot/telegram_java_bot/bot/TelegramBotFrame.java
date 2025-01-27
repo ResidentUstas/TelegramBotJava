@@ -121,6 +121,9 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
                 case "/phrasesCount":
                     sendMessage(update.getMessage().getChatId(), "Фраз в списке: " + phrases_count, 0);
                     return true;
+                case "/docker":
+                    sendMessage(update.getMessage().getChatId(), "привет поцы", 0);
+                    return true;
             }
         }
         return false;
