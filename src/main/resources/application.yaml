@@ -1,17 +1,3 @@
-spring:
-  jpa:
-    database: POSTGRESQL
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-  datasource:
-    url: jdbc:postgresql://localhost:5432/foodOrders
-    username: postgres
-    password: postgres
-    driverClassName: org.postgresql.Driver
-  sql:
-    init:
-      platform: postgres
 bot:
-  name: "spareParts_bot"
-  token: "7693043506:AAH1GbDtPQTyoULWLKyVWAEvN2EfAoYwMcg"
+  name: "pasha_cool_bot"
+  token: "8013072863:AAE1ohNEZodedaf3BPQr_iRv_y9J0bs8TjU"
