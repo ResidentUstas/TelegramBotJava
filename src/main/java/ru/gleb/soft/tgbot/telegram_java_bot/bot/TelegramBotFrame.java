@@ -1,5 +1,6 @@
 package ru.gleb.soft.tgbot.telegram_java_bot.bot;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.io.*;
 import java.util.*;
 
 @Component
+@Slf4j
 public class TelegramBotFrame extends TelegramLongPollingBot {
     @Autowired
     DefaultBotOptions defaultBotOptions;
@@ -43,6 +45,7 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        log.info("Запрос получен");
         if (checkCommands(update)) return;
 
         switch (mode) {
