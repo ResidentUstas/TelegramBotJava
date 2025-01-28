@@ -113,13 +113,15 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
                     return true;
                 case "/stopadd":
                     mode = modes.dialog;
+                    phrases.clear();
+                    phrases = getPhrasesList();
                     sendMessage(update.getMessage().getChatId(), "Фразы добавлены", 0);
                     return true;
                 case "/phrases":
                     sendPhrasesList(update);
                     return true;
                 case "/phrasesCount":
-                    sendMessage(update.getMessage().getChatId(), "Фраз в списке: " + phrases_count, 0);
+                    sendMessage(update.getMessage().getChatId(), "Фраз в списке: " + phrases.size(), 0);
                     return true;
                 case "/docker":
                     sendMessage(update.getMessage().getChatId(), "привет поцы", 0);
@@ -131,7 +133,7 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
 
     private ArrayList<String> getPhrasesList() {
         try {
-            var reader = new BufferedReader(new FileReader("phrases.txt"));
+            var reader = new BufferedReader(new FileReader("src\\main\\resources\\phrases.txt"));
             String line = reader.readLine();
             var result = new ArrayList<String>();
             result.add(line);
@@ -149,7 +151,7 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
     }
 
     private void addPhrase(String phrase) throws IOException {
-        FileWriter writer = new FileWriter("phrases.txt", true);
+        FileWriter writer = new FileWriter("src\\main\\resources\\phrases.txt", true);
         BufferedWriter bufferWriter = new BufferedWriter(writer);
         bufferWriter.write(phrase + "\r\n");
         bufferWriter.close();

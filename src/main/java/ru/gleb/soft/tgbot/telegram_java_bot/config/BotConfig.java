@@ -18,9 +18,9 @@ public class BotConfig {
     @Bean
     public DefaultBotOptions getDefaultBotOptions(){
         DefaultBotOptions botOptions = new DefaultBotOptions();
-        botOptions.setProxyHost("proxy.krista.ru");
-        botOptions.setProxyPort(8080);
-        botOptions.setProxyType(DefaultBotOptions.ProxyType.HTTP);
+//        botOptions.setProxyHost("proxy.krista.ru");
+//        botOptions.setProxyPort(8080);
+//        botOptions.setProxyType(DefaultBotOptions.ProxyType.HTTP);
         return botOptions;
     }
 
