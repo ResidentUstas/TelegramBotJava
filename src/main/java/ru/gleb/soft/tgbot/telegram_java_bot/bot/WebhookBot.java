@@ -1,26 +1,28 @@
 package ru.gleb.soft.tgbot.telegram_java_bot.bot;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
+import org.telegram.telegrambots.bots.TelegramWebhookBot;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.gleb.soft.tgbot.telegram_java_bot.enums.modes;
 
 import java.io.*;
 import java.util.*;
 
-@Component
 @Slf4j
-public class TelegramBotFrame extends TelegramLongPollingBot {
-    @Autowired
+@Getter
+@Setter
+@Component
+public class WebhookBot extends TelegramWebhookBot {
+    private String botPath;
+    private String botUsername;
+    private String botToken;
     DefaultBotOptions defaultBotOptions;
     private List<String> phrases;
     private int phrases_count;
@@ -28,30 +30,25 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
     private Queue<Integer> recently_phrases;
     private modes mode;
 
-    public TelegramBotFrame(DefaultBotOptions defaultBotOptions, @Value("${bot.token}") String botToken) {
-        super(defaultBotOptions, botToken);
-
-        List<BotCommand> botCommandList = new ArrayList<>();
+    public WebhookBot(DefaultBotOptions options) {
+        super(options);
         phrases = getPhrasesList();
         phrases_count = phrases.size();
         rand = new Random();
         mode = modes.dialog;
         recently_phrases = new LinkedList<>();
-        try {
-            this.execute(new SetMyCommands(botCommandList, new BotCommandScopeDefault(), null));
-        } catch (TelegramApiException e) {
-        }
     }
 
     @Override
-    public void onUpdateReceived(Update update) {
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         log.info("Запрос получен");
-        if (checkCommands(update)) return;
+        if (checkCommands(update)) return null;
 
         switch (mode) {
             case dialog -> getBotAnswer(update);
             case adding -> setBotPhrase(update);
         }
+        return null;
     }
 
     private void getBotAnswer(Update update) {
@@ -136,7 +133,7 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
 
     private ArrayList<String> getPhrasesList() {
         try {
-            var reader = new BufferedReader(new FileReader("phrases.txt"));
+            var reader = new BufferedReader(new FileReader("src\\main\\resources\\phrases.txt"));
             String line = reader.readLine();
             var result = new ArrayList<String>();
             result.add(line);
@@ -154,7 +151,7 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
     }
 
     private void addPhrase(String phrase) throws IOException {
-        FileWriter writer = new FileWriter("phrases.txt", true);
+        FileWriter writer = new FileWriter("src\\main\\resources\\phrases.txt", true);
         BufferedWriter bufferWriter = new BufferedWriter(writer);
         bufferWriter.write(phrase + "\r\n");
         bufferWriter.close();
@@ -166,11 +163,6 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
             sendMessage(chatId, phrase, 0);
         }
         sendMessage(chatId, "Список закончен", 0);
-    }
-
-    @Override
-    public void onUpdatesReceived(List<Update> updates) {
-        super.onUpdatesReceived(updates);
     }
 
     @Override

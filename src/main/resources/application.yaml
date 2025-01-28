@@ -1,3 +1,5 @@
 bot:
   name: "pasha_cool_bot"
   token: "8013072863:AAE1ohNEZodedaf3BPQr_iRv_y9J0bs8TjU"
+telegram:
+  webHookPath:
