@@ -3,11 +3,14 @@ package ru.gleb.soft.tgbot.telegram_java_bot.bot;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -126,10 +129,11 @@ public class WebhookBot extends TelegramWebhookBot {
                     phrases.clear();
                     phrases = getPhrasesList();
                     phrases_count = phrases.size();
+                    sendPhrasesList(8013072863L);
                     sendMessage(update.getMessage().getChatId(), "Фразы добавлены", 0);
                     return true;
                 case "/phrases":
-                    sendPhrasesList(update);
+                    sendPhrasesList(update.getMessage().getChatId());
                     return true;
                 case "/count":
                     sendMessage(update.getMessage().getChatId(), "Фраз в списке: " + phrases.size(), 0);
@@ -138,6 +142,10 @@ public class WebhookBot extends TelegramWebhookBot {
                     sendMessage(update.getMessage().getChatId(), "привет поцы", 0);
                     return true;
             }
+        }
+        if (update.hasMessage() && update.getMessage().hasDocument() && update.getMessage().getFrom().getId() != 8013072863L) {
+            log.info("Получил документ");
+            setPhrasesFromFile(update);
             return false;
         }
         return true;
@@ -172,8 +180,7 @@ public class WebhookBot extends TelegramWebhookBot {
         log.info("закрыл файл");
     }
 
-    private void sendPhrasesList(Update update) throws TelegramApiException {
-        var chatId = update.getMessage().getChatId();
+    private void sendPhrasesList(long chatId) throws TelegramApiException {
         File file = new File("phrases.txt");
         InputFile inputFile = new InputFile(file, "phrases.txt");
 
@@ -181,6 +188,39 @@ public class WebhookBot extends TelegramWebhookBot {
         sendDocumentRequest.setChatId(chatId);
         sendDocumentRequest.setDocument(inputFile);
         execute(sendDocumentRequest);
+    }
+
+    private void setPhrasesFromFile(Update update){
+        String doc_id = update.getMessage().getDocument().getFileId();
+        String doc_name = update.getMessage().getDocument().getFileName();
+        String doc_mine = update.getMessage().getDocument().getMimeType();
+        int doc_size = Math.toIntExact(update.getMessage().getDocument().getFileSize());
+        String getID = String.valueOf(update.getMessage().getFrom().getId());
+
+        Document document = new Document();
+        document.setMimeType(doc_mine);
+        document.setFileName(doc_name);
+        document.setFileSize((long) doc_size);
+        document.setFileId(doc_id);
+
+        GetFile getFile = new GetFile();
+        getFile.setFileId(document.getFileId());
+        try {
+            org.telegram.telegrambots.meta.api.objects.File file = execute(getFile);
+            var reader = new BufferedReader(new FileReader(file.getFilePath()));
+            String line = reader.readLine();
+            log.info(line);
+            while (line != null) {
+                line = reader.readLine();
+               log.info(line);
+            }
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
