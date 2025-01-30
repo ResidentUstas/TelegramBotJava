@@ -3,11 +3,12 @@ package ru.gleb.soft.tgbot.telegram_java_bot.bot;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.gleb.soft.tgbot.telegram_java_bot.enums.modes;
@@ -42,7 +43,11 @@ public class WebhookBot extends TelegramWebhookBot {
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         log.info("Запрос получен");
         log.info(update.toString());
-        if (checkCommands(update)) return null;
+        try {
+            if (checkCommands(update)) return null;
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
 
         switch (mode) {
             case dialog -> getBotAnswer(update);
@@ -102,7 +107,7 @@ public class WebhookBot extends TelegramWebhookBot {
         }
     }
 
-    private boolean checkCommands(Update update) {
+    private boolean checkCommands(Update update) throws TelegramApiException {
         if (update.hasMessage() && update.getMessage().hasText()) {
             var command = update.getMessage().getText().replaceAll("@.*", "");
             switch (command) {
@@ -161,15 +166,22 @@ public class WebhookBot extends TelegramWebhookBot {
         bufferWriter.close();
     }
 
-    private void sendPhrasesList(Update update) {
+    private void sendPhrasesList(Update update) throws TelegramApiException {
         var chatId = update.getMessage().getChatId();
-        StringBuilder result = new StringBuilder();
-        int index = 1;
-        for (var phrase : phrases) {
-            result.append(index).append(". ").append(phrase).append(" | \r\n");
-        }
-        sendMessage(chatId, result.toString(), 0);
-        sendMessage(chatId, "Список закончен", 0);
+//        StringBuilder result = new StringBuilder();
+//        int index = 1;
+//        for (var phrase : phrases) {
+//            result.append(index).append(". ").append(phrase).append(" | \r\n");
+//        }
+//        sendMessage(chatId, result.toString(), 0);
+//        sendMessage(chatId, "Список закончен", 0);
+        File file = new File("phrases.txt");
+        InputFile inputFile = new InputFile(file, "phrases.txt");
+
+        SendDocument sendDocumentRequest = new SendDocument();
+        sendDocumentRequest.setChatId(chatId);
+        sendDocumentRequest.setDocument(inputFile);
+        execute(sendDocumentRequest);
     }
 
     @Override
