@@ -41,6 +41,7 @@ public class WebhookBot extends TelegramWebhookBot {
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         log.info("Запрос получен");
+        log.info(update.toString());
         if (checkCommands(update)) return null;
 
         switch (mode) {
