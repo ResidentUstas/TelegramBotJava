@@ -192,7 +192,7 @@ public class WebhookBot extends TelegramWebhookBot {
         execute(sendDocumentRequest);
     }
 
-    private void setPhrasesFromFile(Update update){
+    private void setPhrasesFromFile(Update update) {
         String doc_id = update.getMessage().getDocument().getFileId();
         String doc_name = update.getMessage().getDocument().getFileName();
         String doc_mine = update.getMessage().getDocument().getMimeType();
@@ -216,8 +216,10 @@ public class WebhookBot extends TelegramWebhookBot {
             log.info(line);
             while (line != null) {
                 line = reader.readLine();
-                addPhrase(line, true);
-               log.info(line);
+                if (line != null) {
+                    addPhrase(line, true);
+                }
+                log.info(line);
             }
         } catch (TelegramApiException e) {
             e.printStackTrace();
