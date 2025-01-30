@@ -160,21 +160,17 @@ public class WebhookBot extends TelegramWebhookBot {
     }
 
     private void addPhrase(String phrase) throws IOException {
+        log.info("открываю в файл");
         FileWriter writer = new FileWriter("phrases.txt", true);
         BufferedWriter bufferWriter = new BufferedWriter(writer);
+        log.info("пишу в файл: " + phrase);
         bufferWriter.write(phrase + "\r\n");
         bufferWriter.close();
+        log.info("закрыл файл");
     }
 
     private void sendPhrasesList(Update update) throws TelegramApiException {
         var chatId = update.getMessage().getChatId();
-//        StringBuilder result = new StringBuilder();
-//        int index = 1;
-//        for (var phrase : phrases) {
-//            result.append(index).append(". ").append(phrase).append(" | \r\n");
-//        }
-//        sendMessage(chatId, result.toString(), 0);
-//        sendMessage(chatId, "Список закончен", 0);
         File file = new File("phrases.txt");
         InputFile inputFile = new InputFile(file, "phrases.txt");
 
