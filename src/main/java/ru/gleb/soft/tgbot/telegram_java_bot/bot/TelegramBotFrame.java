@@ -105,7 +105,7 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
 
     private boolean checkCommands(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            var command = update.getMessage().getText();
+            var command = update.getMessage().getText().replaceAll("@.*", "");
             switch (command) {
                 case "/start":
                     sendMessage(update.getMessage().getChatId(), phrases.get(rand.nextInt(phrases_count)), 0);
@@ -114,7 +114,7 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
                     mode = modes.adding;
                     sendMessage(update.getMessage().getChatId(), "Пришлите фразы для добавление", 0);
                     return true;
-                case "/stopadd":
+                case "/stop":
                     mode = modes.dialog;
                     phrases.clear();
                     phrases = getPhrasesList();
@@ -123,7 +123,7 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
                 case "/phrases":
                     sendPhrasesList(update);
                     return true;
-                case "/phrasesCount":
+                case "/count":
                     sendMessage(update.getMessage().getChatId(), "Фраз в списке: " + phrases.size(), 0);
                     return true;
                 case "/docker":
@@ -136,7 +136,7 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
 
     private ArrayList<String> getPhrasesList() {
         try {
-            var reader = new BufferedReader(new FileReader("phrases.txt"));
+            var reader = new BufferedReader(new FileReader("src\\main\\resources\\phrases.txt"));
             String line = reader.readLine();
             var result = new ArrayList<String>();
             result.add(line);
@@ -154,7 +154,7 @@ public class TelegramBotFrame extends TelegramLongPollingBot {
     }
 
     private void addPhrase(String phrase) throws IOException {
-        FileWriter writer = new FileWriter("phrases.txt", true);
+        FileWriter writer = new FileWriter("src\\main\\resources\\phrases.txt", true);
         BufferedWriter bufferWriter = new BufferedWriter(writer);
         bufferWriter.write(phrase + "\r\n");
         bufferWriter.close();
