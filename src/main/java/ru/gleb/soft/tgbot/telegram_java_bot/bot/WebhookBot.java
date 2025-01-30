@@ -207,7 +207,8 @@ public class WebhookBot extends TelegramWebhookBot {
         getFile.setFileId(document.getFileId());
         try {
             org.telegram.telegrambots.meta.api.objects.File file = execute(getFile);
-            var reader = new BufferedReader(new FileReader(file.getFilePath()));
+            downloadFile(file, new File("phrasefile.txt"));
+            var reader = new BufferedReader(new FileReader("phrasefile.txt"));
             String line = reader.readLine();
             log.info(line);
             while (line != null) {
