@@ -128,8 +128,9 @@ public class WebhookBot extends TelegramWebhookBot {
                     sendMessage(update.getMessage().getChatId(), "привет поцы", 0);
                     return true;
             }
+            return false;
         }
-        return false;
+        return true;
     }
 
     private ArrayList<String> getPhrasesList() {
