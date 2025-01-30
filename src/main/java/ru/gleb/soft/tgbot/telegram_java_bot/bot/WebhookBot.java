@@ -132,7 +132,7 @@ public class WebhookBot extends TelegramWebhookBot {
 
     private ArrayList<String> getPhrasesList() {
         try {
-            var reader = new BufferedReader(new FileReader("src\\main\\resources\\phrases.txt"));
+            var reader = new BufferedReader(new FileReader("phrases.txt"));
             String line = reader.readLine();
             var result = new ArrayList<String>();
             result.add(line);
@@ -150,7 +150,7 @@ public class WebhookBot extends TelegramWebhookBot {
     }
 
     private void addPhrase(String phrase) throws IOException {
-        FileWriter writer = new FileWriter("src\\main\\resources\\phrases.txt", true);
+        FileWriter writer = new FileWriter("phrases.txt", true);
         BufferedWriter bufferWriter = new BufferedWriter(writer);
         bufferWriter.write(phrase + "\r\n");
         bufferWriter.close();
