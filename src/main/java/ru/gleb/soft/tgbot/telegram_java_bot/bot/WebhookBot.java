@@ -56,8 +56,9 @@ public class WebhookBot extends TelegramWebhookBot {
             if (update.getMessage().getReplyToMessage().getFrom().getId() == 8013072863L) {
                 var chatId = update.getMessage().getChatId();
                 var phraseID = getPhraseID();
+                var replyMess = update.getMessage();
                 String messageText = phrases.get(phraseID);
-                sendMessage(chatId, messageText, 0);
+                sendMessage(chatId, messageText, replyMess.getMessageId());
             }
         }
     }
