@@ -52,10 +52,14 @@ public class WebhookBot extends TelegramWebhookBot {
     }
 
     private void getBotAnswer(Update update) {
-            var chatId = update.getMessage().getChatId();
-            var phraseID = getPhraseID();
-            String messageText = phrases.get(phraseID);
-            sendMessage(chatId, messageText, 0);
+        if (update.getMessage().getReplyToMessage() != null) {
+            if (update.getMessage().getReplyToMessage().getFrom().getId() == 8013072863L) {
+                var chatId = update.getMessage().getChatId();
+                var phraseID = getPhraseID();
+                String messageText = phrases.get(phraseID);
+                sendMessage(chatId, messageText, 0);
+            }
+        }
     }
 
     private int getPhraseID() {
@@ -68,7 +72,7 @@ public class WebhookBot extends TelegramWebhookBot {
             phraseID = rand.nextInt(phrases_count);
         }
         recently_phrases.add(phraseID);
-        if (recently_phrases.size() > 30) {
+        if (recently_phrases.size() > 40) {
             recently_phrases.poll();
         }
         return phraseID;
@@ -99,7 +103,7 @@ public class WebhookBot extends TelegramWebhookBot {
 
     private boolean checkCommands(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            var command = update.getMessage().getText();
+            var command = update.getMessage().getText().replaceAll("@.*", "");
             switch (command) {
                 case "/start":
                     sendMessage(update.getMessage().getChatId(), phrases.get(rand.nextInt(phrases_count)), 0);
@@ -108,7 +112,7 @@ public class WebhookBot extends TelegramWebhookBot {
                     mode = modes.adding;
                     sendMessage(update.getMessage().getChatId(), "Пришлите фразы для добавление", 0);
                     return true;
-                case "/stopadd":
+                case "/stop":
                     mode = modes.dialog;
                     phrases.clear();
                     phrases = getPhrasesList();
@@ -117,7 +121,7 @@ public class WebhookBot extends TelegramWebhookBot {
                 case "/phrases":
                     sendPhrasesList(update);
                     return true;
-                case "/phrasesCount":
+                case "/count":
                     sendMessage(update.getMessage().getChatId(), "Фраз в списке: " + phrases.size(), 0);
                     return true;
                 case "/docker":
