@@ -26,6 +26,7 @@ public class WebhookBot extends TelegramWebhookBot {
     private String botPath;
     private String botUsername;
     private String botToken;
+    private String fileName;
     DefaultBotOptions defaultBotOptions;
     private List<String> phrases;
     private int phrases_count;
@@ -39,6 +40,7 @@ public class WebhookBot extends TelegramWebhookBot {
         phrases_count = phrases.size();
         rand = new Random();
         mode = modes.dialog;
+        fileName = "phrases.txt";
         recently_phrases = new LinkedList<>();
     }
 
@@ -146,14 +148,14 @@ public class WebhookBot extends TelegramWebhookBot {
         if (update.hasMessage() && update.getMessage().hasDocument() && update.getMessage().getFrom().getId() != 8013072863L) {
             log.info("Получил документ");
             setPhrasesFromFile(update);
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     private ArrayList<String> getPhrasesList() {
         try {
-            var reader = new BufferedReader(new FileReader("phrases.txt"));
+            var reader = new BufferedReader(new FileReader(fileName));
             String line = reader.readLine();
             var result = new ArrayList<String>();
             result.add(line);
@@ -172,7 +174,7 @@ public class WebhookBot extends TelegramWebhookBot {
 
     private void addPhrase(String phrase) throws IOException {
         log.info("открываю в файл");
-        FileWriter writer = new FileWriter("phrases.txt", true);
+        FileWriter writer = new FileWriter(fileName, true);
         BufferedWriter bufferWriter = new BufferedWriter(writer);
         log.info("пишу в файл: " + phrase);
         bufferWriter.write(phrase + "\r\n");
@@ -181,8 +183,8 @@ public class WebhookBot extends TelegramWebhookBot {
     }
 
     private void sendPhrasesList(long chatId) throws TelegramApiException {
-        File file = new File("phrases.txt");
-        InputFile inputFile = new InputFile(file, "phrases.txt");
+        File file = new File(fileName);
+        InputFile inputFile = new InputFile(file, fileName);
 
         SendDocument sendDocumentRequest = new SendDocument();
         sendDocumentRequest.setChatId(chatId);
@@ -190,7 +192,7 @@ public class WebhookBot extends TelegramWebhookBot {
         execute(sendDocumentRequest);
     }
 
-    private void setPhrasesFromFile(Update update){
+    private void setPhrasesFromFile(Update update) {
         String doc_id = update.getMessage().getDocument().getFileId();
         String doc_name = update.getMessage().getDocument().getFileName();
         String doc_mine = update.getMessage().getDocument().getMimeType();
@@ -207,20 +209,13 @@ public class WebhookBot extends TelegramWebhookBot {
         getFile.setFileId(document.getFileId());
         try {
             org.telegram.telegrambots.meta.api.objects.File file = execute(getFile);
-            downloadFile(file, new File("phrasefile.txt"));
-            var reader = new BufferedReader(new FileReader("phrasefile.txt"));
-            String line = reader.readLine();
-            log.info(line);
-            while (line != null) {
-                line = reader.readLine();
-               log.info(line);
-            }
+            downloadFile(file, new File("newfrases.txt"));
+            fileName = "newfrases.txt";
+            phrases.clear();
+            phrases = getPhrasesList();
+            phrases_count = phrases.size();
         } catch (TelegramApiException e) {
             e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
