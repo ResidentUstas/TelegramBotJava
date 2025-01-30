@@ -163,12 +163,12 @@ public class WebhookBot extends TelegramWebhookBot {
 
     private void sendPhrasesList(Update update) {
         var chatId = update.getMessage().getChatId();
-        String result = "";
+        StringBuilder result = new StringBuilder();
         int index = 1;
         for (var phrase : phrases) {
-            result += index + ". " + phrase + " | \r\n" ;
+            result.append(index).append(". ").append(phrase).append(" | \r\n");
         }
-        sendMessage(chatId, result, 0);
+        sendMessage(chatId, result.toString(), 0);
         sendMessage(chatId, "Список закончен", 0);
     }
 
