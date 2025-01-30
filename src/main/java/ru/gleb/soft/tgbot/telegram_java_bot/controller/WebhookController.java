@@ -13,10 +13,11 @@ import ru.gleb.soft.tgbot.telegram_java_bot.bot.WebhookBot;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/bot")
 public class WebhookController {
     private final WebhookBot telegramBot;
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
         return telegramBot.onWebhookUpdateReceived(update);
     }

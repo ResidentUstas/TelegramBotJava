@@ -18,7 +18,6 @@ import java.util.*;
 @Slf4j
 @Getter
 @Setter
-@Component
 public class WebhookBot extends TelegramWebhookBot {
     private String botPath;
     private String botUsername;
