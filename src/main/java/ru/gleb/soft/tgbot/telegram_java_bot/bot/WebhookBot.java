@@ -129,7 +129,7 @@ public class WebhookBot extends TelegramWebhookBot {
                     phrases.clear();
                     phrases = getPhrasesList();
                     phrases_count = phrases.size();
-                    sendPhrasesList(8013072863L);
+                    sendPhrasesList(506238949L);
                     sendMessage(update.getMessage().getChatId(), "Фразы добавлены", 0);
                     return true;
                 case "/phrases":
