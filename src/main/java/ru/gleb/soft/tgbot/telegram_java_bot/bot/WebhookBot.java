@@ -41,10 +41,11 @@ public class WebhookBot extends TelegramWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        log.info("Запрос получен");
+        log.info("Запрос получен " + getMode());
         log.info(update.toString());
         try {
             if (checkCommands(update)) return null;
+            log.info("Команды проверены " + getMode());
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -85,9 +86,11 @@ public class WebhookBot extends TelegramWebhookBot {
     }
 
     private void setBotPhrase(Update update) {
+        log.info("SetBotPhrase " + getMode());
         var newPhrase = update.getMessage();
         try {
             addPhrase(newPhrase.getText());
+            log.info("SetBotPhrase OK " + getMode());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
