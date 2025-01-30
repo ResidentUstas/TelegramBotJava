@@ -117,6 +117,7 @@ public class WebhookBot extends TelegramWebhookBot {
                     mode = modes.dialog;
                     phrases.clear();
                     phrases = getPhrasesList();
+                    phrases_count = phrases.size();
                     sendMessage(update.getMessage().getChatId(), "Фразы добавлены", 0);
                     return true;
                 case "/phrases":
@@ -162,9 +163,12 @@ public class WebhookBot extends TelegramWebhookBot {
 
     private void sendPhrasesList(Update update) {
         var chatId = update.getMessage().getChatId();
+        String result = "";
+        int index = 1;
         for (var phrase : phrases) {
-            sendMessage(chatId, phrase, 0);
+            result += index + ". " + phrase + " | \r\n" ;
         }
+        sendMessage(chatId, result, 0);
         sendMessage(chatId, "Список закончен", 0);
     }
 
