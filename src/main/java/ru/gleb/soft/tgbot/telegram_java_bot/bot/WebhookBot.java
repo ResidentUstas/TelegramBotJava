@@ -153,7 +153,7 @@ public class WebhookBot extends TelegramWebhookBot {
         if (update.hasMessage() && update.getMessage().hasDocument() && update.getMessage().getFrom().getId() != 8013072863L) {
             log.info("Получил документ");
             setPhrasesFromFile(update);
-            sendMessage(update.getMessage().getChatId(), "фразы загружены", 0);
+            log.info("Фразы загружены");
             return false;
         }
         return false;
