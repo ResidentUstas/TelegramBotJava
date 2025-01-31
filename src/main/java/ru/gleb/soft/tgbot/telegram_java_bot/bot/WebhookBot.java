@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -236,6 +237,14 @@ public class WebhookBot extends TelegramWebhookBot {
         GetFile getFile = new GetFile();
         getFile.setFileId(document.getFileId());
         return getFile;
+    }
+
+    @Scheduled(fixedDelay = 60000)
+    private void sendSchedulerMessage() {
+        var chatId = -1002362332718L;
+        var phraseID = getPhraseID();
+        String messageText = phrases.get(phraseID);
+        sendMessage(chatId, messageText, 0);
     }
 
     @Override
