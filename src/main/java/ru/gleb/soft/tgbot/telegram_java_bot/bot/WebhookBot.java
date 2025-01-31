@@ -239,7 +239,7 @@ public class WebhookBot extends TelegramWebhookBot {
         return getFile;
     }
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 7200000)
     private void sendSchedulerMessage() {
         var chatId = -1002362332718L;
         var phraseID = getPhraseID();
