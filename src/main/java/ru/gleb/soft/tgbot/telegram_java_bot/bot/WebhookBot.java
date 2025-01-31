@@ -240,7 +240,7 @@ public class WebhookBot extends TelegramWebhookBot {
         return getFile;
     }
 
-    @Scheduled(cron = "* 0 */2 * * *")
+    @Scheduled(cron = "0 0 */2 * * *")
     private void sendSchedulerMessage() {
         log.info("сру по распианию!");
         var chatId = -1002362332718L;
