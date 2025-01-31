@@ -89,6 +89,7 @@ public class WebhookBot extends TelegramWebhookBot {
         if (recently_phrases.size() > 40) {
             recently_phrases.poll();
         }
+        log.info("выбрано id: " + phraseID);
         return phraseID;
     }
 
@@ -133,6 +134,7 @@ public class WebhookBot extends TelegramWebhookBot {
                     phrases.clear();
                     phrases = getPhrasesList();
                     phrases_count = phrases.size();
+                    log.info("количество фраз: " + phrases_count);
                     sendPhrasesList(506238949L);
                     sendPhrasesList(update.getMessage().getChatId());
                     sendMessage(update.getMessage().getChatId(), "Фразы добавлены", 0);
@@ -168,7 +170,6 @@ public class WebhookBot extends TelegramWebhookBot {
                 line = reader.readLine();
                 result.put(index++, line);
             }
-
             reader.close();
             return result;
         } catch (IOException e) {
@@ -241,9 +242,11 @@ public class WebhookBot extends TelegramWebhookBot {
 
     @Scheduled(cron = "* 0 */2 * * *")
     private void sendSchedulerMessage() {
+        log.info("сру по распианию!");
         var chatId = -1002362332718L;
         var phraseID = getPhraseID();
         String messageText = phrases.get(phraseID);
+        sendMessage(chatId, "сру по распианию!", 0);
         sendMessage(chatId, messageText, 0);
     }
 
