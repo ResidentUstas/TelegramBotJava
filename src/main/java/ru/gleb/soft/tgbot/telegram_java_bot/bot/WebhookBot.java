@@ -77,20 +77,7 @@ public class WebhookBot extends TelegramWebhookBot {
     }
 
     private int getPhraseID() {
-        var phraseID = rand.nextInt(phrases_count);
-        if (recently_phrases.isEmpty()) {
-            recently_phrases.add(phraseID);
-            return phraseID;
-        }
-        while (recently_phrases.contains(phraseID)) {
-            phraseID = rand.nextInt(phrases_count);
-        }
-        recently_phrases.add(phraseID);
-        if (recently_phrases.size() > 40) {
-            recently_phrases.poll();
-        }
-        log.info("выбрано id: " + phraseID);
-        return phraseID;
+       return rand.nextInt(phrases_count);
     }
 
     private void setBotPhrase(Update update) {
@@ -246,7 +233,6 @@ public class WebhookBot extends TelegramWebhookBot {
         var chatId = -1002362332718L;
         var phraseID = getPhraseID();
         String messageText = phrases.get(phraseID);
-        sendMessage(chatId, "сру по распианию!", 0);
         sendMessage(chatId, messageText, 0);
     }
 
