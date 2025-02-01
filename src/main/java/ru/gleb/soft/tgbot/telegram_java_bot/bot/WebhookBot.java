@@ -201,6 +201,10 @@ public class WebhookBot extends TelegramWebhookBot {
                 }
                 log.info(line);
             }
+            phrases.clear();
+            phrases = getPhrasesList();
+            phrases_count = phrases.size();
+            log.info("количество фраз: " + phrases_count);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
