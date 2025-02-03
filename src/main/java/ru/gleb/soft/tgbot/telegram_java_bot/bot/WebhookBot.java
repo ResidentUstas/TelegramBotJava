@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -56,6 +57,13 @@ public class WebhookBot extends TelegramWebhookBot {
         }
 
         switch (mode) {
+            case troll -> {
+                try {
+                    delKolan(update);
+                } catch (TelegramApiException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             case dialog -> getBotAnswer(update);
             case adding -> setBotPhrase(update);
         }
@@ -147,6 +155,10 @@ public class WebhookBot extends TelegramWebhookBot {
                     return true;
                 case "/docker":
                     sendMessage(update.getMessage().getChatId(), "привет поцы", 0);
+                    return true;
+                case "/kokoko":
+                    mode = mode == modes.troll ? modes.dialog : modes.troll;
+                    log.info("включил режим троллинга!)");
                     return true;
             }
         }
@@ -248,6 +260,18 @@ public class WebhookBot extends TelegramWebhookBot {
         String messageText = phrases.get(phraseID);
         sendMessage(chatId, "сру по распианию!", 0);
         sendMessage(chatId, messageText, 0);
+    }
+
+    private void delKolan(Update update) throws TelegramApiException {
+        if (update.getMessage().getFrom().getId() == 6170146017L) {
+            DeleteMessage deleteMessage = new DeleteMessage();
+            deleteMessage.setChatId(update.getMessage().getChatId());
+            deleteMessage.setMessageId(update.getMessage().getMessageId());
+            execute(deleteMessage);
+        }
+        else {
+            getBotAnswer(update);
+        }
     }
 
     @Override

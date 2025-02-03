@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 public enum modes {
     dialog(0, "Отвечает на сообщения"),
 
-    adding(1, "Добавляем фразы");
+    adding(1, "Добавляем фразы"),
+
+    troll(2, "Троллим колю");
 
     private final int modeId;
     private final String modeDescription;
