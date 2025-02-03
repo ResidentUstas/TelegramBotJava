@@ -145,7 +145,7 @@ public class WebhookBot extends TelegramWebhookBot {
                     return true;
                 case "/kokoko":
                     mode = mode == modes.troll ? modes.dialog : modes.troll;
-                    log.info("включил режим троллинга!)");
+                    log.info(mode == modes.troll ? "включил режим троллинга!)" : "вылючил режим троллинга!)");
                     return true;
             }
         }
@@ -258,6 +258,7 @@ public class WebhookBot extends TelegramWebhookBot {
             deleteMessage.setChatId(update.getMessage().getChatId());
             deleteMessage.setMessageId(update.getMessage().getMessageId());
             execute(deleteMessage);
+            log.info("Зажарил петуха!Удалил кукарятину");
         }
         else {
             getBotAnswer(update);
