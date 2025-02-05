@@ -52,7 +52,7 @@ public class WebhookBot extends TelegramWebhookBot {
         try {
             if (checkCommands(update)) return null;
             log.info("Команды проверены " + getMode());
-        } catch (TelegramApiException e) {
+        } catch (TelegramApiException | IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -84,8 +84,20 @@ public class WebhookBot extends TelegramWebhookBot {
         }
     }
 
+    private void delRepeatPhrases() throws IOException {
+        HashSet<String> phrasesSet = new HashSet<>();
+        for (var phrase : phrases.entrySet()) {
+            phrasesSet.add(phrase.getValue());
+        }
+        var iterator = phrasesSet.stream().iterator();
+        addPhrase(iterator.next(), false);
+        while (iterator.hasNext()){
+            addPhrase(iterator.next(), true);
+        }
+    }
+
     private int getPhraseID() {
-       return rand.nextInt(phrases_count);
+        return rand.nextInt(phrases_count);
     }
 
     private void setBotPhrase(Update update) {
@@ -113,7 +125,7 @@ public class WebhookBot extends TelegramWebhookBot {
         }
     }
 
-    private boolean checkCommands(Update update) throws TelegramApiException {
+    private boolean checkCommands(Update update) throws TelegramApiException, IOException {
         if (update.hasMessage() && update.getMessage().hasText()) {
             var command = update.getMessage().getText().replaceAll("@.*", "");
             switch (command) {
@@ -146,6 +158,10 @@ public class WebhookBot extends TelegramWebhookBot {
                 case "/kokoko":
                     mode = mode == modes.troll ? modes.dialog : modes.troll;
                     log.info(mode == modes.troll ? "включил режим троллинга!)" : "вылючил режим троллинга!)");
+                    return true;
+                case "/delRepeat":
+                    delRepeatPhrases();
+                    sendPhrasesList(506238949L);
                     return true;
             }
         }
@@ -259,8 +275,7 @@ public class WebhookBot extends TelegramWebhookBot {
             deleteMessage.setMessageId(update.getMessage().getMessageId());
             execute(deleteMessage);
             log.info("Зажарил петуха!Удалил кукарятину");
-        }
-        else {
+        } else {
             getBotAnswer(update);
         }
     }
