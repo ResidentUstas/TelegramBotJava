@@ -19,6 +19,10 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.gleb.soft.tgbot.telegram_java_bot.enums.modes;
 
 import java.io.*;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.*;
 
 @Slf4j
@@ -266,6 +270,20 @@ public class WebhookBot extends TelegramWebhookBot {
         var phraseID = getPhraseID();
         String messageText = phrases.get(phraseID);
         sendMessage(chatId, messageText, 0);
+    }
+
+    @Scheduled(cron = "*/50 * * * * *")
+    private void sendPingMessage() throws IOException, InterruptedException {
+        log.info("отправляю запрос на пинг");
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://telegrambotjava1.onrender.com/bot/ping"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        log.info("получил ответ на пинг");
+        log.info(response.body());
     }
 
     private void delKolan(Update update) throws TelegramApiException {
