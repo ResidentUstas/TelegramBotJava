@@ -9,9 +9,7 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
-import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendVoice;
+import org.telegram.telegrambots.meta.api.methods.send.*;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -86,10 +84,22 @@ public class WebhookBot extends TelegramWebhookBot {
                         String messageText = phrases.get(phraseID);
                         sendMessage(chatId, messageText, replyMess.getMessageId());
                     } else {
-                        sendAudioMessage(chatId, replyMess.getMessageId());
+                        sendSomeMedia(chatId, replyMess.getMessageId());
                     }
                 }
             }
+        }
+    }
+
+    private void sendSomeMedia(Long chatId, int replyMsgId) {
+        Random rand = new Random();
+        int mediaType = rand.nextInt(300);
+        if (mediaType <= 100) {
+            sendAudioMessage(chatId, replyMsgId);
+        } else if (mediaType <= 200) {
+            sendSticker(chatId, replyMsgId);
+        } else {
+           sendVideo(chatId, replyMsgId);
         }
     }
 
@@ -292,6 +302,54 @@ public class WebhookBot extends TelegramWebhookBot {
             log.info("Голосовое сообщение успешно отправлено в чат");
         } catch (TelegramApiException e) {
             log.info("Ошибка при отправке голосового сообщения в чат: {}", e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void sendVideo(Long chatId, int replyMsgId) {
+        SendVideo sendVideo = new SendVideo();
+        sendVideo.setChatId(chatId);
+        Random rand = new Random();
+        InputFile inputFile = new InputFile();
+        log.info("пытаюсь загрузить файл!");
+        int num = rand.nextInt(0, 4);
+        File file = new File("video_" + num + ".webm");
+        inputFile.setMedia(file);
+        sendVideo.setVideo(inputFile);
+        log.info("загрузил файл");
+
+        if (replyMsgId > 0) {
+            sendVideo.setReplyToMessageId(replyMsgId);
+        }
+        try {
+            execute(sendVideo);
+            System.out.println("Видеофайл успешно отправлен в чат: " + chatId);
+        } catch (TelegramApiException e) {
+            System.err.println("Ошибка при отправке видеофайла в чат " + chatId + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void sendSticker(Long chatId, int replyMsgId) {
+        SendSticker sendSticker = new SendSticker();
+        sendSticker.setChatId(chatId);
+        Random rand = new Random();
+        InputFile inputFile = new InputFile();
+        log.info("пытаюсь загрузить файл!");
+        int num = rand.nextInt(0, 7);
+        File file = new File("sticker_" + num + ".webm");
+        inputFile.setMedia(file);
+        sendSticker.setSticker(inputFile);
+        log.info("загрузил файл");
+
+        if (replyMsgId > 0) {
+            sendSticker.setReplyToMessageId(replyMsgId);
+        }
+        try {
+            execute(sendSticker);
+            System.out.println("Стикер успешно отправлен в чат: " + chatId);
+        } catch (TelegramApiException e) {
+            System.err.println("Ошибка при отправке стикера в чат " + chatId + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
