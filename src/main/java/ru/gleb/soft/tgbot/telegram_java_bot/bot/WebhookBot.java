@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendVoice;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -95,7 +96,7 @@ public class WebhookBot extends TelegramWebhookBot {
         }
         var iterator = phrasesSet.stream().iterator();
         addPhrase(iterator.next(), false);
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             addPhrase(iterator.next(), true);
         }
     }
@@ -261,6 +262,28 @@ public class WebhookBot extends TelegramWebhookBot {
         GetFile getFile = new GetFile();
         getFile.setFileId(document.getFileId());
         return getFile;
+    }
+
+    @Scheduled(cron = "50 * * * * *")
+    private void sendAudioMsg() {
+        SendVoice sendVoice = new SendVoice();
+        sendVoice.setChatId(-1002362332718L);
+        log.info("аудио по распианию!");
+
+        InputFile inputFile = new InputFile();
+        log.info("пытаюсь загрузить файл!");
+
+        inputFile.setMedia("audio\\audio_1.ogg");
+        sendVoice.setVoice(inputFile);
+        log.info("загрузил файл");
+
+        try {
+            execute(sendVoice);
+            log.info("Голосовое сообщение успешно отправлено в чат");
+        } catch (TelegramApiException e) {
+            log.info("Ошибка при отправке голосового сообщения в чат: {}", e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Scheduled(cron = "0 0 */2 * * *")
