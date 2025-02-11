@@ -313,7 +313,7 @@ public class WebhookBot extends TelegramWebhookBot {
         InputFile inputFile = new InputFile();
         log.info("пытаюсь загрузить файл!");
         int num = rand.nextInt(0, 4);
-        File file = new File("video_" + num + ".webm");
+        File file = new File("video_" + num + ".mp4");
         inputFile.setMedia(file);
         sendVideo.setVideo(inputFile);
         log.info("загрузил файл");
