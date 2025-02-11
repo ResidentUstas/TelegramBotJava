@@ -82,8 +82,12 @@ public class WebhookBot extends TelegramWebhookBot {
                     var chatId = update.getMessage().getChatId();
                     var phraseID = getPhraseID();
                     var replyMess = update.getMessage();
-                    String messageText = phrases.get(phraseID);
-                    sendMessage(chatId, messageText, replyMess.getMessageId());
+                    if (phraseID < phrases_count) {
+                        String messageText = phrases.get(phraseID);
+                        sendMessage(chatId, messageText, replyMess.getMessageId());
+                    } else {
+                        sendAudioMessage(chatId, replyMess.getMessageId());
+                    }
                 }
             }
         }
@@ -102,7 +106,7 @@ public class WebhookBot extends TelegramWebhookBot {
     }
 
     private int getPhraseID() {
-        return rand.nextInt(phrases_count);
+        return rand.nextInt(phrases_count + 100);
     }
 
     private void setBotPhrase(Update update) {
@@ -264,19 +268,25 @@ public class WebhookBot extends TelegramWebhookBot {
         return getFile;
     }
 
-    @Scheduled(cron = "50 * * * * *")
+    @Scheduled(cron = "0 0 */3 * * *")
     private void sendAudioMsg() {
-        SendVoice sendVoice = new SendVoice();
-        sendVoice.setChatId(506238949L);
-        log.info("аудио по распианию!");
+        sendAudioMessage(-1002362332718L, 0);
+    }
 
+    private void sendAudioMessage(Long chatId, int replyMsgId) {
+        SendVoice sendVoice = new SendVoice();
+        sendVoice.setChatId(chatId);
+        Random rand = new Random();
         InputFile inputFile = new InputFile();
         log.info("пытаюсь загрузить файл!");
-        File file = new File("audio_1.ogg");
+        int num = rand.nextInt(1, 3);
+        File file = new File("audio_" + num + ".ogg");
         inputFile.setMedia(file);
         sendVoice.setVoice(inputFile);
         log.info("загрузил файл");
-
+        if (replyMsgId > 0) {
+            sendVoice.setReplyToMessageId(replyMsgId);
+        }
         try {
             execute(sendVoice);
             log.info("Голосовое сообщение успешно отправлено в чат");
