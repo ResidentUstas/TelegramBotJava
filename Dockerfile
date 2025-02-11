@@ -21,6 +21,10 @@ COPY --from=build /target/classes/stickers/sticker_3.webm sticker_3.webm
 COPY --from=build /target/classes/stickers/sticker_4.webm sticker_4.webm
 COPY --from=build /target/classes/stickers/sticker_5.webm sticker_5.webm
 COPY --from=build /target/classes/stickers/sticker_6.webm sticker_6.webm
+COPY --from=build /target/classes/stickers/sticker_7.webm sticker_7.webm
+COPY --from=build /target/classes/stickers/sticker_8.webm sticker_8.webm
+COPY --from=build /target/classes/stickers/sticker_9.webm sticker_9.webm
+COPY --from=build /target/classes/stickers/sticker_10.webm sticker_10.webm
 
 COPY --from=build /target/classes/video/video_0.mp4 video_0.mp4
 COPY --from=build /target/classes/video/video_1.mp4 video_1.mp4

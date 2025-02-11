@@ -336,7 +336,7 @@ public class WebhookBot extends TelegramWebhookBot {
         Random rand = new Random();
         InputFile inputFile = new InputFile();
         log.info("пытаюсь загрузить файл!");
-        int num = rand.nextInt(0, 7);
+        int num = rand.nextInt(0, 11);
         File file = new File("sticker_" + num + ".webm");
         inputFile.setMedia(file);
         sendSticker.setSticker(inputFile);
