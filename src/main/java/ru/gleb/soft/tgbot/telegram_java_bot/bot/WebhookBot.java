@@ -34,7 +34,6 @@ public class WebhookBot extends TelegramWebhookBot {
     DefaultBotOptions defaultBotOptions;
     private HashMap<Integer, String> phrases;
     private int phrases_count;
-    private Random rand;
     private Queue<Integer> recently_phrases;
     private modes mode;
 
@@ -43,7 +42,6 @@ public class WebhookBot extends TelegramWebhookBot {
         phrases = getPhrasesList();
         assert phrases != null;
         phrases_count = phrases.size();
-        rand = new Random();
         mode = modes.dialog;
         recently_phrases = new LinkedList<>();
     }
@@ -116,6 +114,7 @@ public class WebhookBot extends TelegramWebhookBot {
     }
 
     private int getPhraseID() {
+        Random rand = new Random();
         return rand.nextInt(phrases_count + 50);
     }
 
@@ -149,6 +148,7 @@ public class WebhookBot extends TelegramWebhookBot {
             var command = update.getMessage().getText().replaceAll("@.*", "");
             switch (command) {
                 case "/start":
+                    Random rand = new Random();
                     sendMessage(update.getMessage().getChatId(), phrases.get(rand.nextInt(phrases_count)), 0);
                     return true;
                 case "/add":
