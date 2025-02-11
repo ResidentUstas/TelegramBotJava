@@ -106,7 +106,7 @@ public class WebhookBot extends TelegramWebhookBot {
     }
 
     private int getPhraseID() {
-        return rand.nextInt(phrases_count + 100);
+        return rand.nextInt(phrases_count + 10);
     }
 
     private void setBotPhrase(Update update) {
