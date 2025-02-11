@@ -289,7 +289,7 @@ public class WebhookBot extends TelegramWebhookBot {
         Random rand = new Random();
         InputFile inputFile = new InputFile();
         log.info("пытаюсь загрузить файл!");
-        int num = rand.nextInt(1, 3);
+        int num = rand.nextInt(0, 8);
         File file = new File("audio_" + num + ".ogg");
         inputFile.setMedia(file);
         sendVoice.setVoice(inputFile);

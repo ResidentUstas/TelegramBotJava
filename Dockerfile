@@ -11,8 +11,14 @@ COPY --from=build /target/telegram-java-bot-0.0.1-SNAPSHOT.jar CryptoService.jar
 
 COPY --from=build /target/classes/phrases.txt phrases.txt
 
+COPY --from=build /target/classes/audio/audio_0.ogg audio_0.ogg
 COPY --from=build /target/classes/audio/audio_1.ogg audio_1.ogg
 COPY --from=build /target/classes/audio/audio_2.ogg audio_2.ogg
+COPY --from=build /target/classes/audio/audio_3.ogg audio_3.ogg
+COPY --from=build /target/classes/audio/audio_4.ogg audio_4.ogg
+COPY --from=build /target/classes/audio/audio_5.ogg audio_5.ogg
+COPY --from=build /target/classes/audio/audio_6.ogg audio_6.ogg
+COPY --from=build /target/classes/audio/audio_7.ogg audio_7.ogg
 
 COPY --from=build /target/classes/stickers/sticker_0.webm sticker_0.webm
 COPY --from=build /target/classes/stickers/sticker_1.webm sticker_1.webm
