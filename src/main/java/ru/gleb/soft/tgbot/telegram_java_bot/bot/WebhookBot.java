@@ -272,8 +272,8 @@ public class WebhookBot extends TelegramWebhookBot {
 
         InputFile inputFile = new InputFile();
         log.info("пытаюсь загрузить файл!");
-
-        inputFile.setMedia("audio\\audio_1.ogg");
+        File file = new File("audio\\audio_1.ogg");
+        inputFile.setMedia(file);
         sendVoice.setVoice(inputFile);
         log.info("загрузил файл");
 
