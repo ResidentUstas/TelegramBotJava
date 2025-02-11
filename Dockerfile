@@ -9,7 +9,7 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17-jdk-slim
 COPY --from=build /target/telegram-java-bot-0.0.1-SNAPSHOT.jar CryptoService.jar
 COPY --from=build /target/classes/phrases.txt phrases.txt
-COPY --from=build /target/classes/audio audio
+COPY --from=build /target/classes/audio/audio_1.ogg audio_1.ogg
 # ENV PORT=8080
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","CryptoService.jar"]
