@@ -40,6 +40,9 @@ COPY --from=build /target/classes/video/video_0.mp4 video_0.mp4
 COPY --from=build /target/classes/video/video_1.mp4 video_1.mp4
 COPY --from=build /target/classes/video/video_2.mp4 video_2.mp4
 COPY --from=build /target/classes/video/video_3.mp4 video_3.mp4
+COPY --from=build /target/classes/video/video_4.mp4 video_4.mp4
+COPY --from=build /target/classes/video/video_5.mp4 video_5.mp4
+COPY --from=build /target/classes/video/video_6.mp4 video_6.mp4
 # ENV PORT=8080
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","CryptoService.jar"]
