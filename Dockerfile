@@ -20,21 +20,21 @@ COPY --from=build /target/classes/audio/audio_5.ogg audio_5.ogg
 COPY --from=build /target/classes/audio/audio_6.ogg audio_6.ogg
 COPY --from=build /target/classes/audio/audio_7.ogg audio_7.ogg
 
-COPY --from=build /target/classes/stickers/sticker_0.webm sticker_0.webm
-COPY --from=build /target/classes/stickers/sticker_1.webm sticker_1.webm
-COPY --from=build /target/classes/stickers/sticker_2.webm sticker_2.webm
-COPY --from=build /target/classes/stickers/sticker_3.webm sticker_3.webm
-COPY --from=build /target/classes/stickers/sticker_4.webm sticker_4.webm
-COPY --from=build /target/classes/stickers/sticker_5.webm sticker_5.webm
-COPY --from=build /target/classes/stickers/sticker_6.webm sticker_6.webm
-COPY --from=build /target/classes/stickers/sticker_7.webm sticker_7.webm
-COPY --from=build /target/classes/stickers/sticker_8.webm sticker_8.webm
-COPY --from=build /target/classes/stickers/sticker_9.webm sticker_9.webm
-COPY --from=build /target/classes/stickers/sticker_10.webm sticker_10.webm
+COPY --from=build /target/classes/stickers/webm/sticker_0.webm sticker_0.webm
+COPY --from=build /target/classes/stickers/webm/sticker_1.webm sticker_1.webm
+COPY --from=build /target/classes/stickers/webm/sticker_2.webm sticker_2.webm
+COPY --from=build /target/classes/stickers/webm/sticker_3.webm sticker_3.webm
+COPY --from=build /target/classes/stickers/webm/sticker_4.webm sticker_4.webm
+COPY --from=build /target/classes/stickers/webm/sticker_5.webm sticker_5.webm
+COPY --from=build /target/classes/stickers/webm/sticker_6.webm sticker_6.webm
+COPY --from=build /target/classes/stickers/webm/sticker_7.webm sticker_7.webm
+COPY --from=build /target/classes/stickers/webm/sticker_8.webm sticker_8.webm
+COPY --from=build /target/classes/stickers/webm/sticker_9.webm sticker_9.webm
+COPY --from=build /target/classes/stickers/webm/sticker_10.webm sticker_10.webm
 
-COPY --from=build /target/classes/stickers/sticker_0.webp sticker_0.webp
-COPY --from=build /target/classes/stickers/sticker_1.webp sticker_1.webp
-COPY --from=build /target/classes/stickers/sticker_2.webp sticker_2.webp
+COPY --from=build /target/classes/stickers/web/sticker_0.webp sticker_0.webp
+COPY --from=build /target/classes/stickers/web/sticker_1.webp sticker_1.webp
+COPY --from=build /target/classes/stickers/web/sticker_2.webp sticker_2.webp
 
 COPY --from=build /target/classes/video/video_0.mp4 video_0.mp4
 COPY --from=build /target/classes/video/video_1.mp4 video_1.mp4
