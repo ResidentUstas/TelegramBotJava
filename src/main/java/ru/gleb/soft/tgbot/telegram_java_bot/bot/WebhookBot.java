@@ -97,7 +97,7 @@ public class WebhookBot extends TelegramWebhookBot {
         } else if (mediaType <= 200) {
             sendSticker(chatId, replyMsgId);
         } else {
-           sendVideo(chatId, replyMsgId);
+            sendVideo(chatId, replyMsgId);
         }
     }
 
@@ -336,12 +336,20 @@ public class WebhookBot extends TelegramWebhookBot {
         Random rand = new Random();
         InputFile inputFile = new InputFile();
         log.info("пытаюсь загрузить файл!");
-        int num = rand.nextInt(0, 11);
-        File file = new File("sticker_" + num + ".webm");
-        inputFile.setMedia(file);
-        sendSticker.setSticker(inputFile);
-        log.info("загрузил файл");
-
+        var stickerType = rand.nextInt(200);
+        if (stickerType < 50) {
+            int num = rand.nextInt(0, 11);
+            File file = new File("sticker_" + num + ".webm");
+            inputFile.setMedia(file);
+            sendSticker.setSticker(inputFile);
+            log.info("загрузил файл");
+        } else {
+            int num = rand.nextInt(0, 3);
+            File file = new File("sticker_" + num + ".webp");
+            inputFile.setMedia(file);
+            sendSticker.setSticker(inputFile);
+            log.info("загрузил файл");
+        }
         if (replyMsgId > 0) {
             sendSticker.setReplyToMessageId(replyMsgId);
         }
